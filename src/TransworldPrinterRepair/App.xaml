@@ -1,0 +1,38 @@
+<Application x:Class="Transworld.PrinterRepair.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Transworld.PrinterRepair.Presentation.ViewModels"
+             xmlns:views="clr-namespace:Transworld.PrinterRepair.Presentation.Views"
+             ShutdownMode="OnExplicitShutdown">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Presentation/Styles/Theme.xaml" />
+                <ResourceDictionary Source="Presentation/Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Cada modelo de vista se pinta con su vista. La navegacion consiste en
+                 cambiar el objeto de MainViewModel.CurrentPage. -->
+
+            <DataTemplate DataType="{x:Type vm:AreaSelectionViewModel}">
+                <views:AreaSelectionView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ProblemSelectionViewModel}">
+                <views:ProblemSelectionView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:RepairConfirmationViewModel}">
+                <views:RepairConfirmationView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:RepairProgressViewModel}">
+                <views:RepairProgressView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:RepairResultViewModel}">
+                <views:RepairResultView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

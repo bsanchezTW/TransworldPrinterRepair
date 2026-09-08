@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+
+  "driverPackages": {
+    "xerox-wc5330": {
+      "zip": "Xerox_WorkCentre_5330.zip",
+      "inf": "Xerox WorkCentre 5330/XeroxWorkCentre53xx_PCL6.inf",
+      "driverName": "Xerox WorkCentre 5330 V4 PCL6",
+      "model": "Xerox WorkCentre 5330"
+    },
+    "hp-m426fdw": {
+      "zip": "HP_LaserJet_MFP_M426fdw.zip",
+      "inf": "HP LaserJet MFP M426fdw/hpma5a2a4_x64.inf",
+      "driverName": "HP LaserJet Pro MFP M426f-M427f PCL-6",
+      "model": "HP LaserJet MFP M426fdw"
+    },
+    "hp-m428fdw": {
+      "zip": "HP_LaserJet_Pro_MFP_M428fdw.zip",
+      "inf": "HP LaserJet Pro MFP M428fdw/HP_LJM428f-M429f_V4/hpteC22A4_x64.inf",
+      "driverName": "HP LaserJet Pro M428f-M429f PCL-6 (V4)",
+      "model": "HP LaserJet Pro MFP M428fdw"
+    },
+    "hp-137fnw": {
+      "zip": "HP_Laser_MFP_137fnw.zip",
+      "inf": "HP Laser MFP 137fnw/shm4m.inf",
+      "driverName": "HP Laser MFP 131 133 135-138",
+      "model": "HP Laser MFP 137fnw"
+    },
+    "hp-m402dne": {
+      "zip": "HP_LaserJet_M402dne.zip",
+      "inf": "HP LaserJet M402dne/hpdo602a4_x64.inf",
+      "driverName": "HP LaserJet Pro M402-M403 n-dne PCL-6",
+      "model": "HP LaserJet M402dne"
+    }
+  },
+
+  "areas": [
+    { "key": "gerencia",     "name": "Gerencia",     "ip": "192.168.190.8",  "driverPackage": "xerox-wc5330" },
+    { "key": "finanzas",     "name": "Finanzas",     "ip": "192.168.190.4",  "driverPackage": "hp-m426fdw" },
+    { "key": "facturacion",  "name": "Facturación",  "ip": "192.168.190.12", "driverPackage": "hp-m426fdw" },
+    { "key": "logistica",    "name": "Logística",    "ip": "192.168.190.15", "driverPackage": "hp-m426fdw" },
+    { "key": "rrhh",         "name": "RRHH",         "ip": "192.168.190.7",  "driverPackage": "hp-m428fdw" },
+    { "key": "bodega",       "name": "Bodega",       "ip": "192.168.190.21", "driverPackage": "hp-137fnw" },
+    { "key": "bodega-chica", "name": "Bodega Chica", "ip": "192.168.190.13", "driverPackage": "hp-137fnw" },
+    { "key": "ventas",       "name": "Ventas",       "ip": "192.168.190.5",  "driverPackage": "hp-m402dne" }
+  ],
+
+  "keepPrinterDrivers": [
+    "Microsoft Print To PDF",
+    "Microsoft XPS Document Writer",
+    "Microsoft Shared Fax Driver",
+    "Microsoft Software Printer Driver",
+    "Microsoft OpenXPS Class Driver",
+    "Send To Microsoft OneNote Driver"
+  ],
+
+  "keepPrinterPorts": [
+    "PORTPROMPT:",
+    "SHRFAX:",
+    "nul:",
+    "XPSPort:",
+    "Microsoft.Office.OneNote"
+  ]
+}

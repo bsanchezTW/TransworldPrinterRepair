@@ -1,0 +1,37 @@
+<Window x:Class="Transworld.PrinterRepair.Presentation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AutoReparación de Impresoras Transworld"
+        Height="660" Width="920"
+        MinHeight="660" MinWidth="920"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        FontFamily="{StaticResource UiFontText}"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="ClearType">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Cabecera discreta: identifica la herramienta sin robar protagonismo. -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="40,26,40,0">
+            <Border Width="26" Height="26" CornerRadius="7"
+                    Background="{StaticResource AccentBrush}" VerticalAlignment="Center">
+                <TextBlock Text="T" Foreground="White" FontSize="14" FontWeight="Bold"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="Transworld" Margin="10,0,0,0" VerticalAlignment="Center"
+                       FontSize="14" FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBlock Text="Soporte de impresión" Margin="10,0,0,0" VerticalAlignment="Center"
+                       FontSize="13" Foreground="{StaticResource TextMutedBrush}" />
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" />
+    </Grid>
+</Window>

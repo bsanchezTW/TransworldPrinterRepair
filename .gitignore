@@ -1,0 +1,10 @@
+bin/
+obj/
+publish/
+*.user
+*.suo
+.vs/
+
+# Los paquetes de driver (90 MB) no se versionan.
+# tools/sync-drivers.ps1 los copia desde OneDrive antes de compilar.
+src/TransworldPrinterRepair/Resources/Drivers/*.zip

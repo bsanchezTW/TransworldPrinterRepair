@@ -1,0 +1,135 @@
+<Window x:Class="Transworld.PrinterRepair.Presentation.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Configuración administrativa — Transworld"
+        Height="700" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        FontFamily="{StaticResource UiFontText}"
+        UseLayoutRounding="True">
+
+    <Grid Margin="32,24,32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{Binding Title}" Style="{StaticResource TitleText}" FontSize="26" />
+            <TextBlock Style="{StaticResource SubtitleText}" Margin="0,6,0,0"
+                       Text="Las áreas y los controladores van compilados dentro del ejecutable. Aquí puedes corregir la dirección IP de cada área y comprobar la conexión." />
+        </StackPanel>
+
+        <!-- Estado del equipo: lo primero que hace falta al diagnosticar. -->
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,18,0,0" Padding="18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
+                    <TextBlock Text="SISTEMA" Style="{StaticResource LabelText}" />
+                    <TextBlock Text="{Binding SystemInfo}" FontSize="13" TextWrapping="Wrap"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                    <TextBlock Text="PROTECTED PRINT MODE" Style="{StaticResource LabelText}" />
+                    <TextBlock Text="{Binding ProtectedPrintMode}" FontSize="13" TextWrapping="Wrap"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,10">
+                    <TextBlock Text="CONTROLADORES" Style="{StaticResource LabelText}" />
+                    <TextBlock Text="{Binding PackagesInfo}" FontSize="13" TextWrapping="Wrap"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+                    <TextBlock Text="VERSIÓN" Style="{StaticResource LabelText}" />
+                    <TextBlock Text="{Binding Version}" FontSize="13"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock Text="DATOS Y REGISTROS" Style="{StaticResource LabelText}" />
+                    <TextBlock Text="{Binding DataFolder}" FontSize="12" TextWrapping="Wrap"
+                               Foreground="{StaticResource TextSecondaryBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="2" Margin="0,18,0,0" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Areas}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Card}" Margin="0,0,4,10" Padding="18">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}" />
+                                    <TextBlock Text="{Binding PrinterName}" FontSize="12" Margin="0,2,0,0"
+                                               Foreground="{StaticResource TextMutedBrush}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <TextBox Text="{Binding Ip, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource Field}" Width="160" />
+                                    <Button Content="Probar" Command="{Binding TestCommand}"
+                                            Style="{StaticResource SecondaryButton}"
+                                            Height="38" Padding="16,0" Margin="8,0,0,0" />
+                                    <Button Content="Guardar" Command="{Binding SaveCommand}"
+                                            Style="{StaticResource PrimaryButton}"
+                                            Height="38" Padding="16,0" Margin="8,0,0,0" />
+                                    <Button Content="Restaurar" Command="{Binding ResetCommand}"
+                                            Style="{StaticResource LinkButton}" Margin="8,0,0,0" />
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                           Margin="0,10,0,0" FontSize="12"
+                                           Foreground="{StaticResource TextSecondaryBrush}">
+                                    <Run Text="Controlador:" />
+                                    <Run Text="{Binding DriverName, Mode=OneWay}" FontWeight="SemiBold" />
+                                    <Run Text="  ·  " />
+                                    <Run Text="{Binding Model, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                           Text="{Binding Status}" Margin="0,6,0,0" FontSize="12"
+                                           Foreground="{StaticResource AccentBrush}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Abrir carpeta de registros" Command="{Binding OpenLogsCommand}"
+                    Style="{StaticResource SecondaryButton}" Margin="0,0,12,0" />
+            <Button Content="Cerrar" Command="{Binding CloseCommand}"
+                    Style="{StaticResource PrimaryButton}" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>
