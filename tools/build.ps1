@@ -32,7 +32,7 @@ $driversDir = Join-Path $root 'src\TransworldPrinterRepair\Resources\Drivers'
 $outputDir  = Join-Path $root 'publish'
 
 Write-Host ''
-Write-Host 'AutoReparacion de Impresoras Transworld - publicacion' -ForegroundColor Cyan
+Write-Host 'Reparacion de Impresora Transworld - publicacion' -ForegroundColor Cyan
 Write-Host ('-' * 60)
 
 # ---- 1. Controladores -------------------------------------------------

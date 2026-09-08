@@ -37,7 +37,7 @@ public sealed class AreaSelectionViewModel : ObservableObject
             if (parameter is AreaDefinition area) shell.ShowProblemSelection(area);
         });
 
-        OpenAdminCommand = new RelayCommand(() => _ = shell.OpenAdminAsync());
+        OpenAdminCommand = new RelayCommand(shell.OpenAdmin);
 
         Areas = new ObservableCollection<AreaCardViewModel>();
         Load();

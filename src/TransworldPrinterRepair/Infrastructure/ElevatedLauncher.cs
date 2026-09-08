@@ -28,13 +28,6 @@ public sealed class ElevatedLauncher
             WorkerSwitch, AreaSwitch, areaKey, PipeSwitch, pipeName);
 
     /// <summary>
-    /// Abre el panel administrativo en una instancia elevada aparte. La elevacion ES la
-    /// autenticacion: no hay contrasena propia dentro del programa, solo el UAC de Windows.
-    /// </summary>
-    public Process? LaunchAdmin() =>
-        LaunchElevated("abrir la configuracion administrativa", AdminSwitch);
-
-    /// <summary>
     /// Devuelve null si el usuario rechazo el UAC.
     /// Los argumentos van por ArgumentList: .NET los escapa, no se concatena nada.
     /// </summary>

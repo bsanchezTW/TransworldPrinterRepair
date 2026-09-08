@@ -57,9 +57,20 @@ public partial class App : System.Windows.Application
         Shutdown(exitCode);
     }
 
+    /// <summary>
+    /// Panel administrativo abierto directamente desde la linea de comandos, para soporte.
+    /// Pide la misma contrasena que el boton de engranaje.
+    /// </summary>
     private void RunAdmin()
     {
         var host = new AppHost();
+
+        if (new Presentation.PasswordPromptWindow(host.Log).ShowDialog() != true)
+        {
+            Shutdown(0);
+            return;
+        }
+
         var window = new Presentation.AdminWindow();
         window.DataContext = new AdminSettingsViewModel(host, window.Close);
 

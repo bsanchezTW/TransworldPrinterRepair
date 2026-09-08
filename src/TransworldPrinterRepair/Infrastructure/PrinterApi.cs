@@ -140,7 +140,7 @@ public sealed class PrinterApi
             pDriverName = driverName,
             pPrintProcessor = "winprint",
             pDatatype = "RAW",
-            pComment = "Configurada por AutoReparacion de Impresoras Transworld",
+            pComment = "Configurada por Reparacion de Impresora Transworld",
             pLocation = string.Empty,
             pShareName = string.Empty,
             pSepFile = string.Empty,

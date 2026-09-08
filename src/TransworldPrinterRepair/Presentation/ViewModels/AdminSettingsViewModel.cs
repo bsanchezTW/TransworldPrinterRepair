@@ -114,8 +114,9 @@ public sealed class AdminAreaViewModel : ObservableObject
 }
 
 /// <summary>
-/// Panel administrativo. Se ejecuta SIEMPRE en una instancia elevada aparte: el UAC de
-/// Windows es la autenticacion, no hay ninguna contrasena dentro del programa.
+/// Panel administrativo, protegido por la contrasena de AdminPassword. No necesita elevacion:
+/// la carpeta de datos en ProgramData es escribible por el usuario y lo unico que se modifica
+/// son las IPs de las areas.
 ///
 /// Los drivers y las areas van compilados en el ejecutable, asi que aqui no se pueden
 /// anadir ni sustituir: eso exige regenerar el .exe. Lo que si se puede corregir sobre la
@@ -135,7 +136,7 @@ public sealed class AdminSettingsViewModel : ObservableObject
         OpenLogsCommand = new RelayCommand(OpenLogs);
         CloseCommand = new RelayCommand(closeAction);
 
-        host.Log.Info("Panel administrativo abierto (proceso elevado).");
+        host.Log.Info("Panel administrativo abierto.");
     }
 
     public ObservableCollection<AdminAreaViewModel> Areas { get; }

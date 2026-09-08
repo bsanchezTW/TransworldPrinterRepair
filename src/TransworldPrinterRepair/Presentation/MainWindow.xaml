@@ -1,7 +1,7 @@
 <Window x:Class="Transworld.PrinterRepair.Presentation.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="AutoReparación de Impresoras Transworld"
+        Title="Reparación de Impresora Transworld"
         Height="660" Width="920"
         MinHeight="660" MinWidth="920"
         ResizeMode="CanMinimize"

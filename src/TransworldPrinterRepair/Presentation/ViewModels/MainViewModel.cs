@@ -45,19 +45,20 @@ public sealed class MainViewModel : ObservableObject
         CurrentPage = new RepairResultViewModel(_host, this, area, result);
 
     /// <summary>
-    /// El panel administrativo no es otra pantalla de este proceso: se abre en una instancia
-    /// elevada aparte. Asi el UAC de Windows hace de autenticacion y esa instancia puede
-    /// escribir en ProgramData sin que la interfaz del trabajador corra elevada.
+    /// Abre el panel administrativo tras pedir la contrasena. No hace falta elevar: la carpeta
+    /// de datos en ProgramData es escribible por el usuario, y lo unico que el panel modifica
+    /// son las IPs de las areas.
     /// </summary>
-    public async Task OpenAdminAsync()
+    public void OpenAdmin()
     {
-        var admin = _host.Launcher.LaunchAdmin();
-        if (admin is null) return;   // el usuario rechazo el UAC
+        var owner = System.Windows.Application.Current?.MainWindow;
 
-        using (admin)
-        {
-            await admin.WaitForExitAsync().ConfigureAwait(true);
-        }
+        var prompt = new PasswordPromptWindow(_host.Log) { Owner = owner };
+        if (prompt.ShowDialog() != true) return;
+
+        var admin = new AdminWindow { Owner = owner };
+        admin.DataContext = new AdminSettingsViewModel(_host, admin.Close);
+        admin.ShowDialog();
 
         // El administrador pudo cambiar alguna IP: se recarga y se repinta la lista.
         _host.Configuration.Invalidate();

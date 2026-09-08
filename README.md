@@ -1,4 +1,4 @@
-# AutoReparación de Impresoras Transworld
+# Reparación de Impresora Transworld
 
 Herramienta portable para Windows 10 y 11 (x64) que permite a un trabajador sin conocimientos
 técnicos dejar operativa la impresora de su área en tres clics, sin tocar el Panel de control,
@@ -34,7 +34,7 @@ Pendiente de probar en campo: Windows 10 22H2 y un equipo con Protected Print Mo
 
 ## Entregable
 
-Un **único archivo**: `TransworldPrinterRepair.exe` (~250 MB).
+Un **único archivo**: `TransworldPrinterRepair.exe` (148 MB).
 
 - No tiene instalador. Se copia y se ejecuta.
 - No necesita .NET Runtime, PowerShell adicional ni Visual C++ Redistributable.
@@ -151,8 +151,21 @@ ruta de red sin permiso de escritura.
 
 ## Configuración administrativa
 
-El botón ⚙ de la pantalla inicial abre el panel en una **instancia elevada aparte**. El UAC de
-Windows es la autenticación; no hay ninguna contraseña dentro del programa.
+El botón ⚙ de la pantalla inicial pide una **contraseña de administrador** antes de abrir el
+panel. Tres intentos fallidos cierran el diálogo, y cada intento queda registrado en el log.
+
+> **Sobre esta contraseña.** Va incrustada en el ejecutable, así que **no es un secreto real**:
+> cualquiera que tenga el `.exe` puede extraerla con esfuerzo moderado. Sirve para que un
+> trabajador no entre por curiosidad, no para detener a alguien decidido. En el binario se
+> guarda un hash PBKDF2 (SHA-256, 120 000 iteraciones) en vez del texto plano, de modo que la
+> contraseña no aparece al inspeccionar las cadenas del archivo.
+>
+> Si en algún momento hace falta control de acceso de verdad, la vía correcta es volver a la
+> elevación UAC: ahí la autenticación la hace Windows contra las credenciales reales del
+> dominio. El código para hacerlo sigue en `ElevatedLauncher`.
+
+El panel **no necesita elevación**: `C:\ProgramData` es escribible por el usuario y lo único
+que se modifica son las IPs de las áreas.
 
 Permite:
 

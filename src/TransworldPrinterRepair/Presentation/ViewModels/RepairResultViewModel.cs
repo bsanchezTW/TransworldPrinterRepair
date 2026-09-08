@@ -132,7 +132,7 @@ public sealed class RepairResultViewModel : ObservableObject
 
         stack.Children.Add(new TextBlock
         {
-            Text = "AutoReparación de Impresoras Transworld",
+            Text = "Reparación de Impresora Transworld",
             FontFamily = new FontFamily("Segoe UI"),
             FontSize = 14,
             Foreground = Brushes.Gray,

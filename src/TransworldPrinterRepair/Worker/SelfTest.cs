@@ -48,7 +48,7 @@ public static class SelfTest
             }
         }
 
-        report.AppendLine("AUTODIAGNOSTICO - AutoReparacion de Impresoras Transworld");
+        report.AppendLine("AUTODIAGNOSTICO - Reparacion de Impresora Transworld");
         report.AppendLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         report.AppendLine(new string('=', 70));
         report.AppendLine("Sistema  : " + SystemChecks.DescribeWindows());
