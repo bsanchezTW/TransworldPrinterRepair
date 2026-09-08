@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Reparación de Impresora Transworld"
+        Icon="/Resources/logo.png"
         Height="660" Width="920"
         MinHeight="660" MinWidth="920"
         ResizeMode="CanMinimize"
@@ -20,11 +21,9 @@
 
         <!-- Cabecera discreta: identifica la herramienta sin robar protagonismo. -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="40,26,40,0">
-            <Border Width="26" Height="26" CornerRadius="7"
-                    Background="{StaticResource AccentBrush}" VerticalAlignment="Center">
-                <TextBlock Text="T" Foreground="White" FontSize="14" FontWeight="Bold"
-                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
+            <Image Source="/Resources/logo.png" Width="30" Height="30"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
             <TextBlock Text="Transworld" Margin="10,0,0,0" VerticalAlignment="Center"
                        FontSize="14" FontWeight="SemiBold"
                        Foreground="{StaticResource TextPrimaryBrush}" />

@@ -41,7 +41,7 @@
                             <!-- Marca el area usada la ultima vez en este equipo. -->
                             <Border Grid.Column="1" Visibility="Collapsed" x:Name="LastUsedTag"
                                     Background="{StaticResource AccentBrush}" CornerRadius="9"
-                                    Padding="9,3" VerticalAlignment="Center">
+                                    Padding="9,3" Margin="12,0,0,0" VerticalAlignment="Center">
                                 <TextBlock Text="Tu área" Foreground="White"
                                            FontSize="11" FontWeight="SemiBold" />
                             </Border>

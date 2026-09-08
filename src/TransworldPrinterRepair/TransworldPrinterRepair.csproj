@@ -10,6 +10,7 @@
     <AssemblyName>TransworldPrinterRepair</AssemblyName>
     <RootNamespace>Transworld.PrinterRepair</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- Solo Windows x64. -->
@@ -34,6 +35,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\areas.json" LogicalName="areas.json" />
     <EmbeddedResource Include="Resources\Drivers\*.zip" />
+
+    <!-- El logo va como Resource de WPF para poder referenciarlo con una URI pack.
+         Sigue funcionando con PublishSingleFile: queda dentro del ensamblado. -->
+    <Resource Include="Resources\logo.png" />
   </ItemGroup>
 
 </Project>

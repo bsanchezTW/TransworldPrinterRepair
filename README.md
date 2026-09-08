@@ -1,3 +1,5 @@
+<img src="src/TransworldPrinterRepair/Resources/logo.png" width="96" align="left" hspace="12" />
+
 # Reparación de Impresora Transworld
 
 Herramienta portable para Windows 10 y 11 (x64) que permite a un trabajador sin conocimientos
@@ -174,6 +176,15 @@ Permite:
 - Probar la conexión con cada impresora.
 - Restaurar la IP original.
 - Consultar el estado del equipo y abrir la carpeta de registros.
+
+Para cambiar la contraseña hay que regenerar el hash y recompilar. Calcúlalo así y pega los
+dos valores en `Services/AdminPassword.cs`:
+
+```powershell
+$salt = [byte[]](0x54,0x72,0x61,0x6E,0x73,0x77,0x6F,0x72,0x6C,0x64,0x50,0x52,0x32,0x30,0x32,0x36)
+$pbk = New-Object System.Security.Cryptography.Rfc2898DeriveBytes('NUEVA', $salt, 120000, [System.Security.Cryptography.HashAlgorithmName]::SHA256)
+[System.BitConverter]::ToString($pbk.GetBytes(32)).Replace('-','')
+```
 
 **No permite añadir áreas ni sustituir controladores**: van compilados en el ejecutable, así
 que eso exige regenerar el `.exe` (ver más abajo).
