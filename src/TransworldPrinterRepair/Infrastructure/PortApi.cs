@@ -195,6 +195,12 @@ public sealed class PortApi
                 _log.Info($"Puerto huerfano eliminado: {name}");
                 deleted++;
             }
+            catch (RepairException ex) when (ex.Win32Code == ERROR_BUSY)
+            {
+                // Normal: el spooler lo tiene fijado desde que lo abrio y no lo suelta hasta
+                // reiniciarse. No es un fallo; si apunta a la IP correcta se reutiliza tal cual.
+                _log.Info($"El puerto {name} sigue fijado por el spooler; se reutilizara en vez de recrearlo.");
+            }
             catch (Exception ex)
             {
                 // Un puerto que no se deja borrar no impide completar la reparacion.
@@ -247,9 +253,25 @@ public sealed class PortApi
     /// <summary>
     /// El monitor TCP/IP espera una estructura DELETE_PORT_DATA_1, no el nombre suelto:
     /// pasarle una cadena se rechaza con ERROR_INVALID_DATA (13).
+    ///
+    /// Un puerto que el spooler ha llegado a abrir queda fijado hasta que se reinicia el
+    /// servicio: ni esta API ni Remove-PrinterPort consiguen borrarlo, por mucho que se espere
+    /// (medido: sigue ocupado pasados 22 segundos sin ninguna impresora usandolo). Por eso el
+    /// reintento es corto, solo para casos realmente transitorios, y quedarse ocupado no se
+    /// trata como un error: el paso siguiente reutiliza ese puerto y lo reconfigura.
+    ///
+    /// En la practica la limpieza SI funciona en el caso que importa, que es el de los puertos
+    /// duplicados heredados de sesiones anteriores: tras arrancar el equipo el spooler no los
+    /// tiene abiertos y se eliminan sin problema.
+    ///
+    /// NO se recurre a DeletePortW como alternativa: esa API abre un dialogo de Windows,
+    /// y este proceso corre sin supervision detras de la pantalla de progreso.
     /// </summary>
     private void DeletePort(string portName)
     {
+        const int maxAttempts = 4;
+        const int retryDelayMs = 400;
+
         var data = new DELETE_PORT_DATA_1
         {
             psztPortName = portName,
@@ -264,16 +286,20 @@ public sealed class PortApi
         try
         {
             Marshal.StructureToPtr(data, buffer, false);
-            ExecuteXcv("DeletePort", buffer, (uint)size);
-        }
-        catch (RepairException ex)
-        {
-            _log.Warn($"XcvData no pudo borrar {portName} ({ex.Message}); se prueba con DeletePort.");
 
-            if (!DeletePortApi(null, IntPtr.Zero, portName))
-                throw new RepairException(RepairErrorCode.PuertoNoConfigurado,
-                    $"DeletePort tampoco pudo eliminar '{portName}'.",
-                    PrinterApi.LastError("DeletePort"));
+            for (var attempt = 1; ; attempt++)
+            {
+                try
+                {
+                    ExecuteXcv("DeletePort", buffer, (uint)size);
+                    return;
+                }
+                catch (RepairException ex) when (ex.Win32Code == ERROR_BUSY && attempt < maxAttempts)
+                {
+                    _log.Info($"El puerto {portName} sigue ocupado; reintento {attempt} de {maxAttempts - 1}.");
+                    Thread.Sleep(retryDelayMs);
+                }
+            }
         }
         finally
         {
@@ -307,7 +333,10 @@ public sealed class PortApi
             {
                 var code = Marshal.GetLastWin32Error();
                 throw new RepairException(RepairErrorCode.PuertoNoConfigurado,
-                    $"XcvData({operation}) fallo (Win32 {code}).", new Win32Exception(code));
+                    $"XcvData({operation}) fallo (Win32 {code}).", new Win32Exception(code))
+                {
+                    Win32Code = code,
+                };
             }
 
             // XcvData devuelve TRUE aunque la operacion falle: el resultado real va en status.
@@ -318,7 +347,10 @@ public sealed class PortApi
                         ? RepairErrorCode.PermisosInsuficientes
                         : RepairErrorCode.PuertoNoConfigurado,
                     $"XcvData({operation}) devolvio estado {status}.",
-                    new Win32Exception((int)status));
+                    new Win32Exception((int)status))
+                {
+                    Win32Code = (int)status,
+                };
             }
         }
         finally

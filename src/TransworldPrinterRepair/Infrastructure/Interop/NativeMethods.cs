@@ -40,6 +40,9 @@ internal static class NativeMethods
     internal const int ERROR_FILE_NOT_FOUND = 2;
     internal const int ERROR_UNKNOWN_PORT = 1796;
 
+    /// <summary>El spooler aun no ha soltado el puerto tras eliminar la impresora que lo usaba.</summary>
+    internal const int ERROR_BUSY = 170;
+
     // ---- Puerto TCP/IP estandar ----
     internal const uint PROTOCOL_RAWTCP_TYPE = 1;
     internal const uint PROTOCOL_LPR_TYPE = 2;
@@ -206,10 +209,8 @@ internal static class NativeMethods
     internal static extern bool EnumPorts(
         string? pName, uint level, IntPtr pPorts, uint cbBuf, out uint pcbNeeded, out uint pcReturned);
 
-    /// <summary>Via alternativa de borrado si el monitor rechaza XcvData.</summary>
-    [DllImport("winspool.drv", EntryPoint = "DeletePortW", SetLastError = true, CharSet = CharSet.Unicode)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static extern bool DeletePortApi(string? pName, IntPtr hWnd, string pPortName);
+    // Nota: DeletePortW existe, pero abre un dialogo de Windows. No se usa: la reparacion
+    // debe completarse sin que el usuario vea ninguna ventana del sistema.
 
     [DllImport("winspool.drv", EntryPoint = "XcvDataW", SetLastError = true, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]

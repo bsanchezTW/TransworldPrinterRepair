@@ -17,6 +17,7 @@
         <StackPanel Grid.Row="1" Margin="0,30,0,0" VerticalAlignment="Top">
             <Button Command="{Binding ContinueCommand}"
                     Style="{StaticResource CardButton}"
+                    AutomationProperties.Name="{Binding ProblemTitle}"
                     Height="94" MaxWidth="560" HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
                     <Border Width="46" Height="46" CornerRadius="12"

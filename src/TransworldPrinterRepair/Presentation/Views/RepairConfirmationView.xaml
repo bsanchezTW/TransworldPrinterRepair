@@ -11,29 +11,34 @@
 
         <TextBlock Grid.Row="0" Text="{Binding Title}" Style="{StaticResource TitleText}" />
 
-        <StackPanel Grid.Row="1" Margin="0,24,0,0" MaxWidth="640" HorizontalAlignment="Left">
+        <StackPanel Grid.Row="1" Margin="0,24,0,0" MaxWidth="760" HorizontalAlignment="Left">
 
-            <Border Style="{StaticResource Card}">
+            <!-- Columnas Auto: se ajustan al contenido, asi un nombre de area largo nunca
+                 puede invadir la columna de al lado. -->
+            <Border Style="{StaticResource Card}" HorizontalAlignment="Left">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" MinWidth="120" />
+                        <ColumnDefinition Width="Auto" MinWidth="200" />
+                        <ColumnDefinition Width="Auto" MinWidth="130" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0">
+                    <StackPanel Grid.Column="0" Margin="0,0,40,0">
                         <TextBlock Text="ÁREA" Style="{StaticResource LabelText}" />
-                        <TextBlock Text="{Binding AreaName}" Style="{StaticResource ValueText}" />
+                        <TextBlock Text="{Binding AreaName}" Style="{StaticResource ValueText}"
+                                   TextWrapping="NoWrap" />
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1" Margin="0,0,40,0">
                         <TextBlock Text="IMPRESORA" Style="{StaticResource LabelText}" />
-                        <TextBlock Text="{Binding PrinterName}" Style="{StaticResource ValueText}" />
+                        <TextBlock Text="{Binding PrinterName}" Style="{StaticResource ValueText}"
+                                   TextWrapping="NoWrap" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="DIRECCIÓN IP" Style="{StaticResource LabelText}" />
-                        <TextBlock Text="{Binding Ip}" Style="{StaticResource ValueText}" />
+                        <TextBlock Text="{Binding Ip}" Style="{StaticResource ValueText}"
+                                   TextWrapping="NoWrap" />
                     </StackPanel>
                 </Grid>
             </Border>

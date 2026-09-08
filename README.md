@@ -8,6 +8,28 @@ PowerShell ni Dispositivos e impresoras.
 Abrir TransworldPrinterRepair.exe → Elegir área → "No puedo imprimir" → Reparar → Imprimir
 ```
 
+| | | |
+|---|---|---|
+| ![Selección de área](docs/capturas/1-seleccion-area.png) | ![Problema](docs/capturas/2-problema.png) | ![Confirmación](docs/capturas/3-confirmacion.png) |
+| ![Progreso](docs/capturas/4-progreso.png) | ![Resultado](docs/capturas/5-resultado.png) | ![Error](docs/capturas/6-error.png) |
+
+## Estado de la validación
+
+Probado en Windows 11 25H2 (build 26200) x64 contra una Xerox WorkCentre 5330 real en
+`192.168.190.8`, que además tenía el problema de puertos duplicados:
+
+- Flujo completo por la interfaz, con UAC y progreso real. **Correcto.**
+- Tres reparaciones seguidas: siempre 1 impresora y 1 puerto, 2,0 s cada una. **Idempotente.**
+- Dos puertos duplicados reducidos a uno, reconfigurado de LPR 515 a RAW 9100 sin SNMP.
+- `Microsoft Print to PDF` conservada en todas las ejecuciones.
+- Los 5 controladores embebidos instalan correctamente, incluidos el v3 del 137fnw y el v4
+  con sufijo `(V4)`.
+- Impresora marcada como predeterminada desde el proceso no elevado.
+- UAC rechazado: mensaje comprensible y el equipo queda sin tocar.
+- El `.exe` publicado arranca desde una carpeta vacía, sin archivos acompañantes.
+
+Pendiente de probar en campo: Windows 10 22H2 y un equipo con Protected Print Mode activo.
+
 ---
 
 ## Entregable
@@ -71,6 +93,21 @@ herramienta viene a reparar.
 
 RAW es más simple y fiable. Los ocho modelos lo aceptan. Los puertos que se encuentren
 configurados como LPR se reconfiguran a RAW.
+
+### Sobre los puertos que Windows no deja borrar
+
+Un puerto TCP/IP que el spooler ha llegado a abrir queda **fijado hasta que el servicio se
+reinicia**: ni la API del monitor ni `Remove-PrinterPort` consiguen eliminarlo, por mucho que
+se espere (medido: sigue ocupado pasados 22 segundos sin ninguna impresora usándolo).
+
+La aplicación lo trata como algo normal, no como un fallo: si ese puerto ya apunta a la IP
+correcta, lo **reconfigura y lo reutiliza** en lugar de crear otro. El resultado es el mismo —
+una sola impresora y un solo puerto — aunque el puerto conserve su nombre anterior en vez de
+llamarse `IP_<dirección>`.
+
+En el caso que de verdad importa, el de los puertos duplicados heredados de sesiones
+anteriores, la limpieza sí funciona: tras arrancar el equipo el spooler no los tiene abiertos
+y se eliminan sin problema.
 
 ---
 
@@ -171,6 +208,16 @@ temporales sobre `192.0.2.250` (IP reservada por la RFC 5737, nunca corresponde 
 real). No toca nada del equipo y deja un informe en la carpeta de registros.
 
 Ejecutado como administrador hace la prueba completa; sin elevar, omite esa parte.
+
+Para dejar un equipo preparado por adelantado, instalando los cinco controladores sin crear
+ni eliminar ninguna impresora (unos 20 segundos):
+
+```powershell
+TransworldPrinterRepair.exe --selftest --instalar-drivers
+```
+
+Es aditivo y reversible: `pnputil /enum-drivers` los lista y `pnputil /delete-driver oemN.inf`
+los quita.
 
 ---
 

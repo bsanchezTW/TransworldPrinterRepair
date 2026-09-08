@@ -80,7 +80,7 @@ public static class StepMapping
         DisplayStage.EliminandoImpresoras  => "Eliminando impresoras anteriores",
         DisplayStage.InstalandoControlador => "Instalando controlador",
         DisplayStage.ConfigurandoImpresora => "Configurando impresora",
-        _                                  => "Verificando conexion",
+        _                                  => "Verificando conexión",
     };
 }
 
@@ -90,27 +90,27 @@ public static class ErrorMessages
     public static string Friendly(this RepairErrorCode code, string? ip = null, string? printer = null) => code switch
     {
         RepairErrorCode.UacCancelado =>
-            "No se concedieron los permisos necesarios. Vuelve a intentarlo y acepta la ventana de Windows que pide autorizacion.",
+            "No se concedieron los permisos necesarios. Vuelve a intentarlo y acepta la ventana de Windows que pide autorización.",
         RepairErrorCode.PermisosInsuficientes =>
-            "Este equipo no permitio realizar los cambios. Avisa al area de Informatica.",
+            "Este equipo no permitió realizar los cambios. Avisa al área de Informática.",
         RepairErrorCode.SpoolerNoDisponible =>
-            "El servicio de impresion de Windows no responde. Reinicia el equipo e intentalo de nuevo.",
+            "El servicio de impresión de Windows no responde. Reinicia el equipo e inténtalo de nuevo.",
         RepairErrorCode.ConfiguracionInvalida =>
-            "La configuracion de tu area no es valida. Avisa al area de Informatica.",
+            "La configuración de tu área no es válida. Avisa al área de Informática.",
         RepairErrorCode.DriverBloqueadoPorWindows =>
-            "Windows tiene activada una proteccion que impide instalar el controlador de la impresora. Avisa al area de Informatica.",
+            "Windows tiene activada una protección que impide instalar el controlador de la impresora. Avisa al área de Informática.",
         RepairErrorCode.DriverNoInstalado =>
             "No fue posible instalar el controlador de la impresora.",
         RepairErrorCode.PuertoNoConfigurado =>
-            $"No fue posible configurar la conexion con la impresora{Where(ip)}.",
+            $"No fue posible configurar la conexión con la impresora{Where(ip)}.",
         RepairErrorCode.ImpresoraNoCreada =>
             "No fue posible crear la impresora en este equipo.",
         RepairErrorCode.ImpresoraNoResponde =>
-            $"No fue posible comunicarse con la impresora{Where(ip)}. Comprueba que este encendida y conectada a la red.",
+            $"No fue posible comunicarse con la impresora{Where(ip)}. Comprueba que esté encendida y conectada a la red.",
         RepairErrorCode.VerificacionFallida =>
-            $"La impresora {printer ?? "de tu area"} se configuro, pero no quedo en el estado esperado.",
+            $"La impresora {printer ?? "de tu área"} se configuró, pero no quedó en el estado esperado.",
         _ =>
-            "Ocurrio un problema inesperado durante la reparacion.",
+            "Ocurrió un problema inesperado durante la reparación.",
     };
 
     private static string Where(string? ip) => string.IsNullOrWhiteSpace(ip) ? "" : $" en {ip}";
@@ -181,6 +181,9 @@ public sealed class RepairResult
 public sealed class RepairException : Exception
 {
     public RepairErrorCode Code { get; }
+
+    /// <summary>Codigo Win32 de origen, cuando lo hay. Permite reintentar fallos transitorios.</summary>
+    public int Win32Code { get; init; }
 
     public RepairException(RepairErrorCode code, string message, Exception? inner = null)
         : base(message, inner) => Code = code;

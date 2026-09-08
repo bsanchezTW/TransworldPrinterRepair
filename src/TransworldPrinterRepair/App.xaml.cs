@@ -35,9 +35,11 @@ public partial class App : System.Windows.Application
         }
 
         // Diagnostico sin interfaz. Deja un informe en la carpeta de registros.
+        // Con --instalar-drivers instala ademas todos los controladores embebidos,
+        // sin crear ni eliminar impresoras.
         if (Has(e.Args, "--selftest"))
         {
-            Shutdown(SelfTest.Run());
+            Shutdown(SelfTest.Run(installDrivers: Has(e.Args, "--instalar-drivers")));
             return;
         }
 

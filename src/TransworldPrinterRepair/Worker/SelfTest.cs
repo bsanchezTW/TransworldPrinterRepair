@@ -22,7 +22,12 @@ public static class SelfTest
 
     private const string ProbePrinter = "ZZ PRUEBA TRANSWORLD";
 
-    public static int Run()
+    /// <summary>
+    /// <paramref name="installDrivers"/> instala de verdad todos los controladores configurados,
+    /// sin crear ni borrar impresoras. Es aditivo y reversible (pnputil /delete-driver), y sirve
+    /// para dejar un equipo preparado o para comprobar que los paquetes embebidos son validos.
+    /// </summary>
+    public static int Run(bool installDrivers = false)
     {
         var log = new LoggingService("selftest");
         var report = new StringBuilder();
@@ -111,6 +116,34 @@ public static class SelfTest
 
             return $"{installed.Count} drivers en el spooler";
         });
+
+        // ---- Instalacion real de los controladores (opcional) ----
+
+        if (installDrivers && SystemChecks.IsElevated() && config is not null)
+        {
+            report.AppendLine();
+            report.AppendLine("--- Instalacion de los controladores embebidos ---");
+
+            var drivers = new DriverService(printers, new ProcessRunner(log), log);
+
+            foreach (var entry in config.DriverPackages)
+            {
+                var package = entry.Value;
+
+                Check($"Controlador '{package.Model}'", () =>
+                {
+                    if (printers.IsDriverInstalled(package.DriverName))
+                        return "ya estaba instalado";
+
+                    var inf = drivers.ExtractPackage(package);
+                    drivers.StageInDriverStore(inf);
+                    drivers.PublishToSpooler(inf, package.DriverName);
+                    drivers.VerifyInstalled(package.DriverName);
+
+                    return "instalado como '" + package.DriverName + "'";
+                });
+            }
+        }
 
         // ---- Prueba de ida y vuelta: solo con privilegios de administrador ----
 
